@@ -1,0 +1,19 @@
+steps_before_reapers = None
+galactic_readiness = None
+
+
+def initialize_game_parameters(difficulty):
+    global steps_before_reapers, galactic_readiness
+    if difficulty == 'easy':
+        steps_before_reapers = 30
+        galactic_readiness = 1000
+    elif difficulty == 'medium':
+        steps_before_reapers = 20
+        galactic_readiness = 500
+    elif difficulty == 'hard':
+        galactic_readiness = 250
+    elif difficulty == 'insane':
+        steps_before_reapers = 10
+        galactic_readiness = 0
+    else:
+        pass
