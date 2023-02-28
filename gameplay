@@ -1,0 +1,117 @@
+import character
+import game_info
+import random
+
+quests = []
+
+
+def initialize_game(character_name, character_class, difficulty):
+    character.create_character(character_name, character_class)
+    game_info.initialize_game_parameters(difficulty)
+    output()
+    quests.append(cerberus_defence())
+
+
+def update():
+    quests[0]()  # хз как это работает
+
+
+def cerberus_defence():
+    enemies_amount = random.randint(3 + character.exp, 7 + character.exp)
+    enemy_health = enemies_amount * 100
+    range_left = 1 + character.exp
+    range_right = 10 + character.exp
+    enemy_dodge = random.randint(range_left, range_right)
+    enemy_attack = random.randint(range_left, range_right)
+    enemy_speech = random.randint(range_left, range_right)
+    enemy_charisma = random.randint(range_left, range_right)
+
+    initial_dodge = character.dodge
+    panic_cooldown = 0
+    battle_is_continued = True
+    is_win = True
+
+    print('Вы прибыли на одну из колоний систем Термина, где десантники Цербера проводят диверсию '
+          'промышленном обьекте')
+    print(f'Вам противостоит {enemies_amount} врагов с суммарным здоовьем {enemy_health}')
+    print(f'У вас {character.health} очков здоровья')
+
+    while battle_is_continued:
+        print('Вы можете: ')
+        print('Атаковать')
+        print('увернуться')
+        print('деморализовать')
+
+        action = input('Ваши действия? ')
+        if action == 'Атаковать':
+            if character.attack > random.randint(0, enemy_dodge):
+                enemy_health -= random.randint(1, 2 * character.attack)
+                print("Вы попали по одному из противников!")
+                if enemy_health // 100 < enemies_amount + 1:
+                    enemies_amount -= 1
+                    if enemies_amount == 0:
+                        print('Вы успешно нейтрализовали всех противников!')
+                        battle_is_continued = False
+                        continue
+                    else:
+                        print('Один из церберовцев упал замертво! Из пробитой брони идет дым')
+                else:
+                    print('Церберовец успел спрятаться за укрытием, и ваш выстрел не достиг цели')
+            elif action == 'увернуться':
+                print('Вы решили переждать за укрытием')
+                character.dodge += 4
+            elif action == 'деморализовать':
+                if panic_cooldown == 0:
+                    print('Вы высунулись из-за укрытия и крикнули, что вы капитан Шепард и это ваша любимая планета'
+                          'в Галактике')
+                    char_panic = random.randint((character.charisma / 3 + character.speech / 2) / 2,
+                                                character.charisma / 2 + character.speech)
+                    enemies_panic = random.randint(0, int((enemy_speech + enemy_charisma / 2) * enemies_amount))
+                    if char_panic > enemies_panic:
+                        print('Враги задрожали от страха и не в силах ничего предпринять еще два хода')
+                        panic_cooldown = 2
+                    else:
+                        print('Если бы шлемы церберовцев были открытыми, вы бы увидели их издевательские улыбки.'
+                              'Ваши угрозы их не впечатлили')
+                else:
+                    print('Противники и так дрожат от страха, пожалейте их!')
+            print('\n Ходит противник: ')
+            for i in range(1, enemies_amount + 1):
+                if enemy_attack > random.randint(0, character.dodge):
+                    character.health -= random.randint(1, 2 * enemy_attack)
+                    print(f'Церберовец {i} попал вам в какой-то из жизненно важных органов. Вы крикнули от боли. Но молча')
+                    if character.health <= 0:
+                        print('Перед тем, как навсегда уйти из этого мира, вы услшали радостнй крик противника'
+                              f'{i} - Потрачено')
+                        battle_is_continued = False
+                        is_win = False
+                        continue
+            character.dodge = initial_dodge
+        if is_win:
+            print('Бездыханные церберовцы лежат у ваших ног, а благодарные жители пытаются пожать вам руку!')
+            print('Теперь, когда планета в безопасности, часть жителей решила пойти добровольцами для защиты Земли')
+            character.exp += 1
+            character.attack += 2
+            character.dodge += 2
+            character.speech += 2
+            character.charisma += 2
+            character.money += 1000
+            game_info.galactic_readiness += 100
+            game_info.steps_before_reapers -= 1
+        else:
+            print('Возможно, вы и спаситель Галактики, но не в этот раз')
+
+
+def output():
+    print('Данные о персонаже:\n')
+    print(f' Имя: {character.name} Шепард')
+    print(f'Опыт: {character.exp} очков')
+    print(f'Деньги :{character.money} кредитов')
+    print(f'Здоровье :{character.health}/100')
+    print(f'Уворот :{character.dodge}')
+    print(f'Атака :{character.attack}')
+    print(f'Красноречие :{character.speech}')
+    print(f'Харизма :{character.charisma}')
+    print(f'\nИгра :\n ')
+    print(f'До битвы у Земли : {game_info.steps_before_reapers} недель')
+    print(f'Уровень готовности галактики : {game_info.galactic_readiness} очков')
