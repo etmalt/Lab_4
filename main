@@ -1,0 +1,25 @@
+import gameplay
+
+
+def main():
+    print('Black Witch Studio представляет ролевую игру нового поколения\n')
+    print('______________________Mass Effect 3.58_________________________')
+    is_continued = True
+
+    while is_continued:
+        print('Главное меню')
+        print('Новая игра')
+        print('Выход\n')
+
+        choice = input('Напишите нужный пункт в точности, как выше. Сделайте свой выбор: ')
+        if choice == 'Новая игра':
+            gameplay.initialize_game('Джон', 'engineer', 'insane')
+        elif choice == 'Выход':
+            print('Осуществляется запланированный выход из программы. Адьес амиго')
+            is_continued = False
+        else:
+            print('Если проблемы начались уже на этом этапе то, может быть, выйти из игры?')
+
+
+if __name__ == '__main__':
+    main()
