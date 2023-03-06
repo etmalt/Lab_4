@@ -1,0 +1,71 @@
+import character
+import game_info
+import random
+
+global is_win
+
+quests = []
+
+
+def initialize_game(character_name, character_class, difficulty):
+    character.create_character(character_name, character_class)
+    game_info.initialize_game_parameters(difficulty)
+    output()
+    quests.append(update)   #почему не работал апдейт со скобками? Нет, работал, но рандом применялся два раза
+
+
+
+def run_prisoners():
+    print('''Мы с сотрудником вдвоем 
+        Кетер изучали
+        Он мудак и я мудак
+        Данные пропали''')
+
+
+def attack():
+    print('''Все объекты класса Кетер
+        Подросли на целый метр
+        И какой сейчас длины?
+        [Данные удалены]''')
+
+
+def tic_tac_toe():
+    print('''Опа опа
+        Зеленая ограда
+        Игорь стал объектом фонда
+        Так ему и надо!''')
+
+
+def scp_701():
+    print('''Мама сшила мне штаны
+        Из березовой коры
+        Их забрал сотрудник фонда
+        [Данные удалены]''')
+
+
+def desert():
+    print('''Мимо отделенья фонда
+        Я без шуток не хожу
+        То им Кетера засуну
+        То Евклид им покажу''')
+
+
+quest = [run_prisoners, desert, scp_701, tic_tac_toe, attack]
+
+
+def update():
+    quest[random.randint(0, 4)]()  # хз как это работает
+
+
+def output():
+    print('Данные о персонаже:\n')
+    print(f' Имя: {character.name}')
+    print(f'Опыт: {character.exp} очков')
+    print(f'Moзги {character.brain}')
+    print(f'Здоровье :{character.health}/100')
+    print(f'Бег :{character.run}')
+    print(f'Атака :{character.attack}')
+    print(f'Удача :{character.luck}')
+    print(f'\nИгра :\n ')
+    print(f' До прибытия помощи : {game_info.time_for_help_arrival} часов')
+    print(f'Уровень готовности : {game_info.steps} очков')
